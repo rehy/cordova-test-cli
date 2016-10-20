@@ -10,11 +10,12 @@ import ParamedicConfig from 'cordova-paramedic/lib/ParamedicConfig'
 
 export class Runner extends ParamedicRunner {
   constructor({tmpDir, ...config} = {}) {
+    const testPlugin = path.join(__dirname, '..', 'test-plugin')
     const paramedicConfig = new ParamedicConfig({
       platform: 'android',
       action: 'build',
       args: '',
-      plugins: [process.cwd()],
+      plugins: [testPlugin, process.cwd()],
       verbose: true,
       cleanUpAfterRun: true,
       ...config,
