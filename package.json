@@ -34,7 +34,8 @@
     "*.md",
     "LICENSE",
     "src",
-    "lib"
+    "lib",
+    "test-plugin"
   ],
   "keywords": [
     "cordova",
