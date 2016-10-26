@@ -13,7 +13,7 @@
     "prepublish": "npm-run-all clean build"
   },
   "author": "Ratson",
-  "license": "GPL-3.0",
+  "license": "Apache-2.0",
   "repository": "rehy/cordova-test-cli",
   "dependencies": {
     "child-process-promise": "^2.1.3",
