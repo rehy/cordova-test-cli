@@ -17,7 +17,7 @@ export class Runner extends ParamedicRunner {
       args: '',
       plugins: [testPlugin, process.cwd()],
       verbose: true,
-      cleanUpAfterRun: false,
+      cleanUpAfterRun: true,
       ...config,
     })
     super(paramedicConfig, null)
@@ -38,7 +38,8 @@ export class Runner extends ParamedicRunner {
 
   prepareProjectToRunTests() {
     super.prepareProjectToRunTests()
-    exec('cordova prepare')
+    const platform = this.config.getPlatformId()
+    exec(`cordova build ${platform}`)
   }
 
   runTests() {
@@ -48,7 +49,7 @@ export class Runner extends ParamedicRunner {
     logger.info(`cordova-test-cli: running ${platform} unit tests`)
     switch (platform) {
       case 'android':
-        exec(`cd ${platformDir} && ./gradlew test`)
+        exec('./gradlew test')
         break
       case 'ios':
         break
