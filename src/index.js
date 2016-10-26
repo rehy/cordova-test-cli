@@ -44,12 +44,16 @@ export class Runner extends ParamedicRunner {
   runTests() {
     const platform = this.config.getPlatformId()
     const platformDir = path.join(this.tempFolder.name, 'platforms', platform)
+    sh.pushd(platformDir)
     logger.info(`cordova-test-cli: running ${platform} unit tests`)
     switch (platform) {
       case 'android':
         exec(`cd ${platformDir} && ./gradlew test`)
         break
+      case 'ios':
+        break
     }
+    sh.popd()
     return super.runTests()
   }
 }
