@@ -22,7 +22,7 @@
     "tmp": "0.0.29"
   },
   "devDependencies": {
-    "babel-cli": "^6.16.0",
+    "babel-cli": "^6.18.0",
     "babel-preset-latest": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "chokidar": "^1.6.1",

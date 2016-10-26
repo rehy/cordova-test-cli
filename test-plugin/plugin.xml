@@ -6,7 +6,7 @@
     <license>MIT</license>
 
     <platform name="android">
-        <framework src="test.gradle" custom="true" type="gradleReference" />
+        <framework src="android/test.gradle" custom="true" type="gradleReference" />
     </platform>
 
     <engines>

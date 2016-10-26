@@ -7,7 +7,7 @@ let storedCWD = storedCWD || process.cwd()
 const runner = new Runner()
 runner.storedCWD = storedCWD
 runner.run()
-.catch(function (error) {
+.catch((error) => {
   if (error && error.stack) {
     console.error(error.stack)
   } else if (error) {

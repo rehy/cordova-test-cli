@@ -17,7 +17,7 @@ export class Runner extends ParamedicRunner {
       args: '',
       plugins: [testPlugin, process.cwd()],
       verbose: true,
-      cleanUpAfterRun: true,
+      cleanUpAfterRun: false,
       ...config,
     })
     super(paramedicConfig, null)
@@ -31,7 +31,7 @@ export class Runner extends ParamedicRunner {
 
   createTempProject() {
     this.tempFolder = this.tempFolder ? this.tempFolder : tmp.dirSync()
-    tmp.setGracefulCleanup();
+    tmp.setGracefulCleanup()
     logger.info(`cordova-test-cli: creating temp project at ${this.tempFolder.name}`)
     exec(`cordova create ${this.tempFolder.name}`)
   }
@@ -43,14 +43,13 @@ export class Runner extends ParamedicRunner {
 
   runTests() {
     const platform = this.config.getPlatformId()
-    sh.pushd(path.join(this.tempFolder.name, 'platforms', platform))
+    const platformDir = path.join(this.tempFolder.name, 'platforms', platform)
     logger.info(`cordova-test-cli: running ${platform} unit tests`)
     switch (platform) {
       case 'android':
-        exec('./gradlew test')
+        exec(`cd ${platformDir} && ./gradlew test`)
         break
     }
-    sh.popd()
     return super.runTests()
   }
 }
