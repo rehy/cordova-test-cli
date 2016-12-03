@@ -1,5 +1,6 @@
 import path from 'path'
 
+import _ from 'lodash'
 import {spawn} from 'child-process-promise'
 import sh from 'shelljs'
 import tmp from 'tmp'
@@ -9,7 +10,9 @@ import {ParamedicRunner} from 'cordova-paramedic/lib/paramedic'
 import ParamedicConfig from 'cordova-paramedic/lib/ParamedicConfig'
 
 export class Runner extends ParamedicRunner {
-  constructor({tmpDir, ...config} = {}) {
+  constructor(opts = {}) {
+    const {tmpDir} = opts
+    const config = _.omit(opts, 'tmpDir')
     const testPlugin = path.join(__dirname, '..', 'test-plugin')
     const paramedicConfig = new ParamedicConfig({
       platform: 'android',
