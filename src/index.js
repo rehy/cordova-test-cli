@@ -5,9 +5,25 @@ import {spawn} from 'child-process-promise'
 import sh from 'shelljs'
 import tmp from 'tmp'
 
-import {exec, logger} from 'cordova-paramedic/lib/utils'
+import {exec, execPromise} from 'cordova-paramedic/lib/utils'
 import {ParamedicRunner} from 'cordova-paramedic/lib/paramedic'
 import ParamedicConfig from 'cordova-paramedic/lib/ParamedicConfig'
+
+import log from './log'
+
+async function runUnitTests({platform, tempFolder}) {
+  const platformDir = path.join(tempFolder.name, 'platforms', platform)
+  sh.pushd(platformDir)
+  log(`running ${platform} unit tests`)
+  switch (platform) {
+    case 'android':
+      await execPromise('./gradlew test')
+      break
+    case 'ios':
+      break
+  }
+  sh.popd()
+}
 
 export class Runner extends ParamedicRunner {
   constructor(opts = {}) {
@@ -32,32 +48,27 @@ export class Runner extends ParamedicRunner {
     }
   }
 
+  get platform() {
+    return this.config.getPlatformId()
+  }
+
   createTempProject() {
     this.tempFolder = this.tempFolder ? this.tempFolder : tmp.dirSync()
     tmp.setGracefulCleanup()
-    logger.info(`cordova-test-cli: creating temp project at ${this.tempFolder.name}`)
+    log(`creating temp project at ${this.tempFolder.name}`)
     exec(`cordova create ${this.tempFolder.name}`)
   }
 
   prepareProjectToRunTests() {
-    super.prepareProjectToRunTests()
-    const platform = this.config.getPlatformId()
-    exec(`cordova build ${platform}`)
+    return super.prepareProjectToRunTests()
+      .then(async (result) => {
+        log(`preparing project to run tests`)
+        await execPromise(`cordova build ${this.platform}`)
+        return result
+      })
   }
 
   runTests() {
-    const platform = this.config.getPlatformId()
-    const platformDir = path.join(this.tempFolder.name, 'platforms', platform)
-    sh.pushd(platformDir)
-    logger.info(`cordova-test-cli: running ${platform} unit tests`)
-    switch (platform) {
-      case 'android':
-        exec('./gradlew test')
-        break
-      case 'ios':
-        break
-    }
-    sh.popd()
-    return super.runTests()
+    return runUnitTests(this).then(() => super.runTests())
   }
 }
