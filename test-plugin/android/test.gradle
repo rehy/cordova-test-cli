@@ -1,4 +1,15 @@
+android {
+  sourceSets {
+    test {
+      java.srcDirs = ['test/java']
+    }
+  }
+}
+
 dependencies {
-    compile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.+'
+    testCompile 'org.powermock:powermock:1.6.+'
+    testCompile 'org.powermock:powermock-module-junit4:1.6.+'
+    testCompile 'org.powermock:powermock-api-mockito2:1.6.+'
     testCompile 'org.json:json:20140107'
 }
