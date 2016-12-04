@@ -1,6 +1,11 @@
 #!/usr/bin/env node
+import path from 'path'
+
 import _ from 'lodash'
+import chalk from 'chalk'
 import tmp from 'tmp'
+import yargs from 'yargs'
+
 import ParamedicConfig from 'cordova-paramedic/lib/ParamedicConfig'
 
 import {Runner} from '.'
@@ -13,8 +18,19 @@ function runTest(opts) {
   return runner.run()
 }
 
+const parser = yargs
+  .usage(`${chalk.bold('Usage:')} $0 ${chalk.blue('[options]')}`)
+  .option('tmp-dir', {
+    coerce: path.resolve,
+    describe: 'path to store the test project',
+  })
+  .help('h')
+  .version()
+  .alias('h', 'help')
+const opts = parser.argv
+
+const tmpDir = opts.tmpDir || tmp.dirSync().name
 const storedCWD = process.cwd()
-const tmpDir = tmp.dirSync().name
 runTest({
   storedCWD,
   tmpDir,
