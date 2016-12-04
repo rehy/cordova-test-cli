@@ -22,18 +22,28 @@ const parser = yargs
   .usage(`${chalk.bold('Usage:')} $0 ${chalk.blue('[options]')}`)
   .option('tmp-dir', {
     coerce: path.resolve,
-    describe: 'path to store the test project',
+    describe: 'Path to store the test project',
+  })
+  .option('stacktrace', {
+    coerce: (opt) => opt ? '--stacktrace' : '',
+  })
+  .option('info', {
+    coerce: (opt) => opt ? '--info' : '',
+  })
+  .option('debug', {
+    coerce: (opt) => opt ? '--debug' : '',
   })
   .help('h')
   .version()
   .alias('h', 'help')
 const opts = parser.argv
+opts.gradleArgs = [opts.stacktrace, opts.info, opts.debug].join(' ')
 
 const tmpDir = opts.tmpDir || tmp.dirSync().name
 const storedCWD = process.cwd()
 runTest({
+  ...opts,
   storedCWD,
-  tmpDir,
   platform: 'android',
 }).catch(error => {
   if (error && error.stack) {

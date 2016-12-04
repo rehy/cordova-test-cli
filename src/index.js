@@ -11,13 +11,15 @@ import ParamedicConfig from 'cordova-paramedic/lib/ParamedicConfig'
 
 import log from './log'
 
-async function runUnitTests({platform, tempFolder}) {
+async function runUnitTests({platform, tempFolder, gradleArgs}) {
   const platformDir = path.join(tempFolder.name, 'platforms', platform)
   sh.pushd(platformDir)
   log(`running ${platform} unit tests`)
   switch (platform) {
     case 'android':
-      await execPromise('./gradlew test')
+      const cmd = `./gradlew test ${gradleArgs}`
+      log(`executing "${cmd}"`)
+      await execPromise(cmd)
       break
     case 'ios':
       break
@@ -26,9 +28,8 @@ async function runUnitTests({platform, tempFolder}) {
 }
 
 export class Runner extends ParamedicRunner {
-  constructor(opts = {}) {
+  constructor(opts) {
     const {tmpDir} = opts
-    const config = _.omit(opts, 'tmpDir')
     const testPlugin = path.join(__dirname, '..', 'test-plugin')
     const paramedicConfig = new ParamedicConfig({
       platform: 'android',
@@ -37,9 +38,11 @@ export class Runner extends ParamedicRunner {
       plugins: [testPlugin, process.cwd()],
       verbose: true,
       cleanUpAfterRun: true,
-      ...config,
+      ...opts,
     })
+
     super(paramedicConfig, null)
+    this.opts = opts
 
     if (tmpDir) {
       this.tempFolder = {
@@ -69,6 +72,10 @@ export class Runner extends ParamedicRunner {
   }
 
   runTests() {
-    return runUnitTests(this).then(() => super.runTests())
+    return runUnitTests({
+      ...this.opts,
+      platform: this.platform,
+      tempFolder: this.tempFolder,
+    }).then(() => super.runTests())
   }
 }
