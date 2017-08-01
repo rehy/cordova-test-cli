@@ -10,27 +10,27 @@
     "clean": "rimraf www",
     "build": "babel src --out-dir lib",
     "watch": "babel src --out-dir lib -w",
-    "prepublish": "npm-run-all clean build"
+    "prepublish": "run-s clean build"
   },
   "author": "Ratson",
   "license": "Apache-2.0",
   "repository": "rehy/cordova-test-cli",
   "dependencies": {
-    "child-process-promise": "^2.2.0",
-    "cordova-paramedic": "github:ratson/cordova-paramedic",
-    "lodash": "^4.17.2",
-    "shelljs": "^0.7.5",
-    "tmp": "0.0.31"
+    "child-process-promise": "^2.2.1",
+    "cordova-paramedic-runner": "^0.0.1",
+    "lodash": "^4.17.4",
+    "shelljs": "^0.7.8",
+    "tmp": "^0.0.31"
   },
   "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-preset-env": "0.0.9",
-    "babel-preset-stage-0": "^6.16.0",
-    "chalk": "^1.1.3",
-    "chokidar": "^1.6.1",
-    "npm-run-all": "^3.1.2",
-    "rimraf": "^2.5.4",
-    "yargs": "6.5.0"
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "chalk": "^2.0.1",
+    "chokidar": "^1.7.0",
+    "npm-run-all": "^4.0.2",
+    "rimraf": "^2.6.1",
+    "yargs": "^8.0.2"
   },
   "files": [
     "*.js",

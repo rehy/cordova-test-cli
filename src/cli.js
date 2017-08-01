@@ -6,12 +6,12 @@ import chalk from 'chalk'
 import tmp from 'tmp'
 import yargs from 'yargs'
 
-import ParamedicConfig from 'cordova-paramedic/lib/ParamedicConfig'
+import ParamedicConfig from 'cordova-paramedic-runner/lib/ParamedicConfig'
 
-import {Runner} from '.'
+import { Runner } from '.'
 
 function runTest(opts) {
-  const {storedCWD} = opts
+  const { storedCWD } = opts
   const runnerOpts = _.omit(opts, 'storedCWD')
   const runner = new Runner(opts)
   runner.storedCWD = storedCWD
@@ -25,13 +25,13 @@ const parser = yargs
     describe: 'Path to store the test project',
   })
   .option('stacktrace', {
-    coerce: (opt) => opt ? '--stacktrace' : '',
+    coerce: opt => (opt ? '--stacktrace' : ''),
   })
   .option('info', {
-    coerce: (opt) => opt ? '--info' : '',
+    coerce: opt => (opt ? '--info' : ''),
   })
   .option('debug', {
-    coerce: (opt) => opt ? '--debug' : '',
+    coerce: opt => (opt ? '--debug' : ''),
   })
   .help('h')
   .version()
@@ -45,14 +45,16 @@ runTest({
   ...opts,
   storedCWD,
   platform: 'android',
-}).catch(error => {
-  if (error && error.stack) {
-    console.error(error.stack)
-  } else if (error) {
-    console.error(error)
-  }
-  process.exit(1)
-}).done(isTestPassed => {
-  const exitCode = isTestPassed ? 0 : 1
-  process.exit(exitCode)
 })
+  .catch(error => {
+    if (error && error.stack) {
+      console.error(error.stack)
+    } else if (error) {
+      console.error(error)
+    }
+    process.exit(1)
+  })
+  .done(isTestPassed => {
+    const exitCode = isTestPassed ? 0 : 1
+    process.exit(exitCode)
+  })

@@ -1,5 +1,5 @@
-import {logger} from 'cordova-paramedic/lib/utils'
+import { logger } from 'cordova-paramedic-runner/lib/utils'
 
-export default (msg) => {
+export default msg => {
   logger.info(`cordova-test-cli: ${msg}`)
 }

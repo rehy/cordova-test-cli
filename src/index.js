@@ -1,17 +1,17 @@
 import path from 'path'
 
 import _ from 'lodash'
-import {spawn} from 'child-process-promise'
+import { spawn } from 'child-process-promise'
 import sh from 'shelljs'
 import tmp from 'tmp'
 
-import {exec, execPromise} from 'cordova-paramedic/lib/utils'
-import {ParamedicRunner} from 'cordova-paramedic/lib/paramedic'
-import ParamedicConfig from 'cordova-paramedic/lib/ParamedicConfig'
+import { exec, execPromise } from 'cordova-paramedic-runner/lib/utils'
+import { ParamedicRunner } from 'cordova-paramedic-runner/lib/paramedic'
+import ParamedicConfig from 'cordova-paramedic-runner/lib/ParamedicConfig'
 
 import log from './log'
 
-async function runUnitTests({platform, tempFolder, gradleArgs}) {
+async function runUnitTests({ platform, tempFolder, gradleArgs }) {
   const platformDir = path.join(tempFolder.name, 'platforms', platform)
   sh.pushd(platformDir)
   log(`running ${platform} unit tests`)
@@ -29,7 +29,7 @@ async function runUnitTests({platform, tempFolder, gradleArgs}) {
 
 export class Runner extends ParamedicRunner {
   constructor(opts) {
-    const {tmpDir} = opts
+    const { tmpDir } = opts
     const testPlugin = path.join(__dirname, '..', 'test-plugin')
     const paramedicConfig = new ParamedicConfig({
       platform: 'android',
@@ -63,12 +63,11 @@ export class Runner extends ParamedicRunner {
   }
 
   prepareProjectToRunTests() {
-    return super.prepareProjectToRunTests()
-      .then(async (result) => {
-        log(`preparing project to run tests`)
-        await execPromise(`cordova build ${this.platform}`)
-        return result
-      })
+    return super.prepareProjectToRunTests().then(async result => {
+      log(`preparing project to run tests`)
+      await execPromise(`cordova build ${this.platform}`)
+      return result
+    })
   }
 
   runTests() {
